@@ -1,0 +1,15 @@
+:root {
+    --purple: #541388;
+    --baby-powder: #fbfffa;
+    --gray: #656767;
+    --black: #050505;
+    --white: #ffffff;
+
+    --text-color: var(--black);
+    --contrast-text-color: var(--white);
+    --background: var(--baby-powder);
+    --border-color: var(--gray);
+
+    --main-bubble-background: var(--purple);
+    --secondary-bubble-background: var(--gray);
+}

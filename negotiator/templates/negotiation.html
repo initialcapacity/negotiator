@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}Negotiation{% endblock %}
+
+{% block body %}
+<section class="chat">
+    {% for message in negotiation.messages %}
+    <div class="message {{ message.role }}">{{ message.content }}</div>
+    {% endfor %}
+</section>
+
+<form action="/negotiation/{{ negotiation.id }}/message" method="post" class="new-message">
+    <input type="text" name="message">
+    <button type="submit">Send</button>
+</form>
+{% endblock %}

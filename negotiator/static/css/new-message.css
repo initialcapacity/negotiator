@@ -1,0 +1,21 @@
+.new-message {
+    padding: 0 .5rem;
+    display: flex;
+    gap: .5rem;
+}
+
+.new-message input {
+    flex: 1;
+    font-size: 1rem;
+    padding: .5rem .7rem;
+    border-radius: 1rem;
+    border: 1px solid var(--border-color);
+}
+
+.new-message button {
+    padding: .5rem .7rem;
+    border-radius: 1rem;
+    background-color: var(--main-bubble-background);
+    color: var(--contrast-text-color);
+    border: none;
+}
