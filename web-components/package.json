@@ -1,0 +1,18 @@
+{
+  "name": "web-components",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build && cp dist/assets/index*.js ../negotiator/static/js/webcomponents.js && cp dist/assets/index*.css ../negotiator/static/css/webcomponents.css",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "lit": "^2.6.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.2",
+    "vite": "^4.3.2"
+  }
+}

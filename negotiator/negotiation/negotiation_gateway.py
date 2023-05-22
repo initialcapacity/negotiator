@@ -35,7 +35,7 @@ class NegotiationGateway:
                 Don't talk to the buyer about any other vehicles you have available, try to make a deal on this one.
                 
                 You'd like to make the deal today, so if the buyer says that they need time to think try to pressure
-                or incentivize them into making the deal now. 
+                or incentivize them into making the deal now.
                 """),
                 MessageRecord(role="assistant", content="""
                 Hi there. I see you're looking at this 2020 Toyota 4Runner. How can I help you?
