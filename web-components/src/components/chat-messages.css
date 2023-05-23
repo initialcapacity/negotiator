@@ -1,4 +1,4 @@
-.chat {
+chat-messages {
     flex: 1;
 
     display: flex;
@@ -6,7 +6,7 @@
     gap: 1rem;
 }
 
-.chat .message {
+chat-messages .message {
     --chat-color: var(--main-bubble-background);
     padding: .5rem .7rem;
     margin-left: auto;
@@ -20,7 +20,7 @@
     color: white;
 }
 
-.chat .message:before {
+chat-messages .message:before {
     display: block;
     content: '';
     position: absolute;
@@ -36,12 +36,12 @@
     border-right-color: var(--chat-color);
 }
 
-.chat .message.assistant {
+chat-messages .message.assistant {
     --chat-color: var(--secondary-bubble-background);
     margin-left: 0;
 }
 
-.chat .message.assistant:before {
+chat-messages .message.assistant:before {
     left: 0;
 
     border-left-color: var(--chat-color);

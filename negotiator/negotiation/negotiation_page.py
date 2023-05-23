@@ -1,3 +1,6 @@
+import dataclasses
+import json
+import typing
 from dataclasses import dataclass
 from uuid import UUID
 
@@ -6,6 +9,7 @@ from flask.typing import ResponseReturnValue
 
 from negotiator.negotiation.assistant import Assistant
 from negotiator.negotiation.negotiation_gateway import NegotiationGateway, NegotiationRecord
+from negotiator.web_support import json_support
 
 
 @dataclass
@@ -40,9 +44,11 @@ def negotiation_page(negotiation_gateway: NegotiationGateway, assistant: Assista
             session.clear()
             return redirect('/')
 
+        info = to_info(record)
         return render_template(
             'negotiation.html',
-            negotiation=to_info(record)
+            negotiation=info,
+            negotiation_json=json_support.encode(info)
         )
 
     @page.post('/negotiation/<negotiation_id>/message')
@@ -57,7 +63,7 @@ def negotiation_page(negotiation_gateway: NegotiationGateway, assistant: Assista
         negotiation_gateway.add_message(negotiation_id, content, role='user')
         negotiation_gateway.add_message(negotiation_id, assistant.reply(record), role='assistant')
 
-        return redirect(f'/negotiation/{ negotiation_id }')
+        return redirect(f'/negotiation/{negotiation_id}')
 
     return page
 

@@ -1,1 +1,2 @@
-import './components/chat.ts';
+import './components/chat-messages.ts';
+import './components/negotiation-chat.ts';
