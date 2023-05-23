@@ -47,3 +47,10 @@ chat-messages .message.assistant:before {
     border-left-color: var(--chat-color);
     border-right-color: transparent;
 }
+
+chat-messages .message.pending {
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+}

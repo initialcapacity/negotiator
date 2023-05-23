@@ -1,7 +1,9 @@
 export type Message = {
     role: 'user' | 'assistant'
-    content: string
-}
+} & (
+    | { content: string }
+    | { pending: true }
+    )
 
 export type Negotiation = {
     id: string

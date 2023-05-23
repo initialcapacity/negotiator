@@ -21,9 +21,23 @@ export class NegotiationChatComponent extends LitElement {
         }
     }
 
+    private removeLastPendingMessage = () => {
+        const lastMessage = this.negotiation.messages[this.negotiation.messages.length - 1]
+        if (!('pending' in lastMessage)) {
+            return
+        }
+
+        this.negotiation = {
+            ...this.negotiation,
+            messages: this.negotiation.messages.slice(0, -1)
+        }
+    }
+
     private handleAddMessage = async (e: CustomEvent<AddMessage>) => {
         const message: Message = {role: "user", content: e.detail.content};
         this.addMessage(message)
+        this.addMessage({role: "assistant", pending: true})
+
         const response = await fetch(`/negotiation/${this.negotiation.id}/message`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
@@ -31,6 +45,7 @@ export class NegotiationChatComponent extends LitElement {
         });
 
         const reply = await response.json()
+        this.removeLastPendingMessage()
         this.addMessage(reply)
     }
 

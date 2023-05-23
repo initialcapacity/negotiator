@@ -14,7 +14,13 @@ export class ChatMessagesComponent extends LitElement {
     }
 
     private renderMessage(message: Message) {
-        return html`<div class="message ${message.role}">${message.content}</div>`
+        if ('pending' in message) {
+            return html`<div class="message ${message.role} pending">
+                <flashing-dots></flashing-dots>
+            </div>`
+        } else {
+            return html`<div class="message ${message.role}">${message.content}</div>`
+        }
     }
 
     render() {
