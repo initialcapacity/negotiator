@@ -1,5 +1,5 @@
 import {customElement, property} from "lit/decorators.js";
-import {html, LitElement} from "lit";
+import {html, LitElement, PropertyValues} from "lit";
 import {Message} from "./negotiation.ts";
 import './chat-messages.css'
 
@@ -11,6 +11,12 @@ export class ChatMessagesComponent extends LitElement {
 
     createRenderRoot() {
         return this;
+    }
+
+    protected update(changedProperties: PropertyValues) {
+        super.update(changedProperties);
+
+        this.scroll({ top: this.scrollHeight, behavior: 'smooth' });
     }
 
     private renderMessage(message: Message) {

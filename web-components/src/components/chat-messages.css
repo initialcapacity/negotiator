@@ -1,9 +1,11 @@
 chat-messages {
-    flex: 1;
+    height: calc(100vh - 8rem);
 
     display: flex;
     flex-direction: column;
     gap: 1rem;
+
+    overflow-y: scroll;
 }
 
 chat-messages .message {
@@ -50,6 +52,7 @@ chat-messages .message.assistant:before {
 
 chat-messages .message.pending {
     height: 2rem;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     width: fit-content;
