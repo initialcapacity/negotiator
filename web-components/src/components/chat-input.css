@@ -1,10 +1,10 @@
-.new-message {
+chat-input form {
     padding: 0 .5rem;
     display: flex;
     gap: .5rem;
 }
 
-.new-message input {
+chat-input input {
     flex: 1;
     font-size: 1rem;
     padding: .5rem .7rem;
@@ -12,7 +12,7 @@
     border: 1px solid var(--border-color);
 }
 
-.new-message button {
+chat-input button {
     padding: .5rem .7rem;
     border-radius: 1rem;
     background-color: var(--main-bubble-background);

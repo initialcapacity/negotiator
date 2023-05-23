@@ -1,10 +1,7 @@
-import dataclasses
-import json
-import typing
 from dataclasses import dataclass
 from uuid import UUID
 
-from flask import Blueprint, render_template, session, redirect, request
+from flask import Blueprint, render_template, session, redirect, request, jsonify
 from flask.typing import ResponseReturnValue
 
 from negotiator.negotiation.assistant import Assistant
@@ -53,17 +50,23 @@ def negotiation_page(negotiation_gateway: NegotiationGateway, assistant: Assista
 
     @page.post('/negotiation/<negotiation_id>/message')
     def new_message(negotiation_id: UUID) -> ResponseReturnValue:
-        content = request.form['message']
         record = negotiation_gateway.find(negotiation_id)
-
         if record is None:
             session.clear()
             return redirect('/')
 
-        negotiation_gateway.add_message(negotiation_id, content, role='user')
-        negotiation_gateway.add_message(negotiation_id, assistant.reply(record), role='assistant')
+        request_body = request.get_json(silent=True)
 
-        return redirect(f'/negotiation/{negotiation_id}')
+        content = request_body['content']
+        negotiation_gateway.add_message(negotiation_id, content, role='user')
+
+        reply = assistant.reply(record)
+        negotiation_gateway.add_message(negotiation_id, reply, role='assistant')
+
+        return jsonify({
+            'role': 'assistant',
+            'content': reply,
+        }), 201
 
     return page
 

@@ -1,13 +1,13 @@
 :root {
     --purple: #541388;
     --baby-powder: #fbfffa;
-    --gray: #656767;
+    --gray: #9d9b9b;
     --black: #050505;
     --white: #ffffff;
 
     --text-color: var(--black);
     --contrast-text-color: var(--white);
-    --background: var(--baby-powder);
+    --background: var(--white);
     --border-color: var(--gray);
 
     --main-bubble-background: var(--purple);
