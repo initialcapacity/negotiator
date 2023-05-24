@@ -1,4 +1,4 @@
-import {customElement, state} from "lit/decorators.js";
+import {customElement, property} from "lit/decorators.js";
 import {Ref, ref, createRef} from 'lit/directives/ref.js';
 import {html, LitElement} from "lit";
 import "./chat-input.css"
@@ -10,7 +10,7 @@ export type AddMessage = {
 @customElement('chat-input')
 export class ChatInputComponent extends LitElement {
 
-    @state()
+    @property({attribute: 'message'})
     message: string = '';
 
     private messageInputRef: Ref<HTMLInputElement> = createRef();
@@ -34,7 +34,7 @@ export class ChatInputComponent extends LitElement {
     render() {
         return html`
             <form @submit=${this.handleSubmit}>
-                <input ${ref(this.messageInputRef)} type="text">
+                <input ${ref(this.messageInputRef)} type="text" value=${this.message}>
                 <button type="submit">Send</button>
             </form>
         `

@@ -77,6 +77,6 @@ def to_info(record: NegotiationRecord) -> NegotiationInfo:
         messages=[
             MessageInfo(role=m.role, content=m.content)
             for m in record.messages
-            if m.role is not 'system'
+            if m.role != 'system'
         ]
     )
