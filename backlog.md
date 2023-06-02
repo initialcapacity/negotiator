@@ -1,0 +1,12 @@
+- [ ] Database
+- [ ] Deploy
+- [ ] Tests
+- [ ] Make an offer & outcome
+- [ ] Get advice 
+- [ ] Get a negotiation score
+- [ ] End/lose the negotiation
+- [ ] Choose advisor
+- [ ] Random events
+- [ ] Generate scenarios
+- [ ] Share and compare
+- [ ] Augment scenario data
