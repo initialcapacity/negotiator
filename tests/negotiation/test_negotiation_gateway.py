@@ -2,7 +2,6 @@ from typing import cast
 from unittest import TestCase
 from uuid import UUID
 
-from negotiator.database_support.result_mapping import map_one_result
 from negotiator.negotiation.negotiation_gateway import NegotiationGateway, NegotiationRecord
 from tests.db_test_support import test_db_template
 
@@ -19,11 +18,13 @@ class TestNegotiationGateway(TestCase):
     def test_create(self):
         returned_id = self.gateway.create()
 
-        result = self.db.query("select id from negotiations")
+        result = self.db.query_to_dict("select id from negotiations")
 
         self.assertIsNotNone(returned_id)
-        stored_id = map_one_result(result, lambda row: row['id'])
-        self.assertEqual(returned_id, stored_id)
+        self.assertEqual(
+            [{'id': returned_id}],
+            result
+        )
 
     def test_find(self):
         negotiation_id = self.gateway.create()
