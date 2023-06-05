@@ -17,6 +17,11 @@ frontend/build:
 	cd web-components; \
 	npm run build
 
+.PHONY: frontend/test
+frontend/test:
+	cd web-components; \
+	npm run test
+
 .PHONY: run
 run:
 	cd negotiator; \

@@ -6,12 +6,15 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && cp dist/assets/index*.js ../negotiator/static/js/webcomponents.js && cp dist/assets/index*.css ../negotiator/static/css/webcomponents.css",
-    "preview": "vite preview"
+    "test": "web-test-runner \"test/**/*.test.ts\" --node-resolve"
   },
   "dependencies": {
     "lit": "^2.6.1"
   },
   "devDependencies": {
+    "@open-wc/testing": "^3.1.8",
+    "@remcovaes/web-test-runner-vite-plugin": "^1.1.5",
+    "@web/test-runner": "^0.16.1",
     "typescript": "^5.0.2",
     "vite": "^4.3.2"
   }
