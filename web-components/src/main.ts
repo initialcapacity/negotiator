@@ -1,4 +1,4 @@
-import './components/flashing-dots.ts';
-import './components/chat-input.ts';
-import './components/chat-messages.ts';
-import './components/negotiation-chat.ts';
+import './chat-input/flashing-dots.ts';
+import './chat-input/chat-input.ts';
+import './chat-messages/chat-messages.ts';
+import './negotiation-chat/negotiation-chat.ts';

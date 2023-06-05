@@ -1,8 +1,8 @@
 import {customElement, property, state} from "lit/decorators.js";
 import {html, LitElement} from "lit";
-import {Message, Negotiation} from "./negotiation.ts";
+import {Message, Negotiation} from "../negotiation/negotiation.ts";
 import './negotiation-chat.css'
-import {AddMessage} from "./chat-input.ts";
+import {AddMessage} from "../chat-input/chat-input.ts";
 
 @customElement('negotiation-chat')
 export class NegotiationChatComponent extends LitElement {

@@ -1,6 +1,6 @@
 import {customElement, property} from "lit/decorators.js";
 import {html, LitElement, PropertyValues} from "lit";
-import {Message} from "./negotiation.ts";
+import {Message} from "../negotiation/negotiation.ts";
 import './chat-messages.css'
 
 @customElement('chat-messages')
