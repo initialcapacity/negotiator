@@ -12,7 +12,7 @@
 1.  Set up the database
     ```shell
     psql postgres < databases/drop_and_create_databases.sql
-    make migrate
+    make migrate migrate-test
     ```
 
 1.  Build the frontend

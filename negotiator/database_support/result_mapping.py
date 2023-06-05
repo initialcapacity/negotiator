@@ -6,8 +6,9 @@ T = TypeVar('T')
 
 
 def map_one_result(result: CursorResult, mapping: Callable[[RowMapping], T]) -> Optional[T]:
-    if cast(int, result.rowcount) > 1:
-        raise Exception(f'Expected one result but got {result.rowcount}')
+    number_of_results = cast(int, result.rowcount)
+    if number_of_results > 1:
+        raise Exception(f'Expected one result but got {number_of_results}')
 
     for row in result:
         return mapping(row._mapping)

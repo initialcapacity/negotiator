@@ -26,6 +26,10 @@ run:
 migrate:
 	poetry run alembic upgrade head
 
+.PHONY: migrate-test
+migrate-test:
+	DATABASE_URL='postgresql://localhost:5432/negotiator_test?user=negotiator&password=negotiator' poetry run alembic upgrade head
+
 .PHONY: type-checks
 type-checks:
 	poetry run mypy negotiator tests;

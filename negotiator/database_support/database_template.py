@@ -14,7 +14,7 @@ class DatabaseTemplate:
         with self.__engine.begin() as connection:
             return action(connection)
 
-    def query(self, statement: str, connection: Optional[Connection], **kwargs: Any) -> CursorResult:
+    def query(self, statement: str, connection: Optional[Connection] = None, **kwargs: Any) -> CursorResult:
         if connection is None:
             return self.transaction(lambda c: c.execute(sqlalchemy.text(statement), kwargs))
         else:
