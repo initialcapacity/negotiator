@@ -65,7 +65,7 @@ export class NegotiationChatComponent extends LitElement {
     render() {
         return html`
             <chat-messages .messages=${this.negotiation.messages}></chat-messages>
-            <chat-input @add-message=${this.handleAddMessage} .message=${this.message}></chat-input>
+            <chat-input @add-message=${this.handleAddMessage} message=${this.message}></chat-input>
         `
     }
 }
