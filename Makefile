@@ -22,6 +22,10 @@ run:
 	cd negotiator; \
 	poetry run python -m negotiator;
 
+.PHONY: migrate
+migrate:
+	poetry run alembic upgrade head
+
 .PHONY: type-checks
 type-checks:
 	poetry run mypy negotiator tests;

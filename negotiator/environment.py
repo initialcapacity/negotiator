@@ -6,17 +6,20 @@ from dataclasses import dataclass
 class Environment:
     port: int
     secret_key: str
+    database_url: str
     openai_api_key: str
     use_flask_debug_mode: bool
 
     def __init__(self,
                  port: int,
                  secret_key: str,
+                 database_url: str,
                  openai_api_key: str,
                  use_flask_debug_mode: bool,
                  ) -> None:
         self.port = port
         self.secret_key = secret_key
+        self.database_url = database_url
         self.openai_api_key = openai_api_key
         self.use_flask_debug_mode = use_flask_debug_mode
 
@@ -25,6 +28,7 @@ class Environment:
         return cls(
             port=int(os.environ.get('PORT', 8081)),
             secret_key=cls.__require_env('SECRET_KEY'),
+            database_url=cls.__require_env('DATABASE_URL'),
             openai_api_key=cls.__require_env('OPENAI_API_KEY'),
             use_flask_debug_mode=os.environ.get('FREEPLAY_USE_FLASK_DEBUG_MODE', 'false') == 'true',
         )

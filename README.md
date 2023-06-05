@@ -4,9 +4,15 @@
 
 1.  Install dependencies
     ```shell
-    brew install pyenv poetry nodejs
+    brew install pyenv poetry nodejs postgresql@14
     poetry install
     make frontend/install
+    ```
+
+1.  Set up the database
+    ```shell
+    psql postgres < databases/drop_and_create_databases.sql
+    make migrate
     ```
 
 1.  Build the frontend

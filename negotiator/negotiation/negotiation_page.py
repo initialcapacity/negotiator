@@ -1,11 +1,10 @@
 from dataclasses import dataclass
 from uuid import UUID
 
-from flask import Blueprint, render_template, session, redirect, request, jsonify
+from flask import Blueprint, render_template, redirect, request, jsonify
 from flask.typing import ResponseReturnValue
-
 from negotiator.negotiation.assistant import Assistant
-from negotiator.negotiation.negotiation_gateway import NegotiationGateway, NegotiationRecord
+from negotiator.negotiation.negotiation_service import NegotiationService, NewMessage, Negotiation
 from negotiator.web_support import json_support
 
 
@@ -21,47 +20,41 @@ class NegotiationInfo:
     messages: list[MessageInfo]
 
 
-def negotiation_page(negotiation_gateway: NegotiationGateway, assistant: Assistant) -> Blueprint:
+def negotiation_page(negotiation_service: NegotiationService, assistant: Assistant) -> Blueprint:
     page = Blueprint('negotiation_page', __name__)
 
     @page.get('/')
     def create() -> ResponseReturnValue:
-        negotiation_id = session.get('negotiation_id', None)
-        if negotiation_id is None:
-            negotiation_id = negotiation_gateway.create()
-            session['negotiation_id'] = negotiation_id
-
+        negotiation_id = negotiation_service.create()
         return redirect(f'/negotiation/{negotiation_id}')
 
     @page.get('/negotiation/<negotiation_id>')
     def show(negotiation_id: UUID) -> ResponseReturnValue:
-        record = negotiation_gateway.find(negotiation_id)
+        negotiation = negotiation_service.find(negotiation_id)
 
-        if record is None:
-            session.clear()
+        if negotiation is None:
             return redirect('/')
 
-        info = to_info(record)
         return render_template(
             'negotiation.html',
-            negotiation=info,
-            negotiation_json=json_support.encode(info)
+            negotiation_json=json_support.encode(to_info(negotiation))
         )
 
     @page.post('/negotiation/<negotiation_id>/message')
     def new_message(negotiation_id: UUID) -> ResponseReturnValue:
-        record = negotiation_gateway.find(negotiation_id)
-        if record is None:
-            session.clear()
+        negotiation = negotiation_service.find(negotiation_id)
+        if negotiation is None:
             return redirect('/')
 
         request_body = request.get_json(silent=True)
 
         content = request_body['content']
-        negotiation_gateway.add_message(negotiation_id, content, role='user')
+        reply = assistant.reply(negotiation.with_message(role='user', content=content))
 
-        reply = assistant.reply(record)
-        negotiation_gateway.add_message(negotiation_id, reply, role='assistant')
+        negotiation_service.add_messages(negotiation_id, [
+            NewMessage(role='user', content=content),
+            NewMessage(role='assistant', content=reply),
+        ])
 
         return jsonify({
             'role': 'assistant',
@@ -71,7 +64,7 @@ def negotiation_page(negotiation_gateway: NegotiationGateway, assistant: Assista
     return page
 
 
-def to_info(record: NegotiationRecord) -> NegotiationInfo:
+def to_info(record: Negotiation) -> NegotiationInfo:
     return NegotiationInfo(
         id=record.id,
         messages=[
