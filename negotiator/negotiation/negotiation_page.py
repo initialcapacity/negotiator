@@ -49,7 +49,7 @@ def negotiation_page(negotiation_service: NegotiationService, assistant: Assista
 
         request_body = cast(
             dict[str, str],
-            request.get_json(silent=True)
+            request.get_json(silent=False)
         )
 
         content = request_body['content']
