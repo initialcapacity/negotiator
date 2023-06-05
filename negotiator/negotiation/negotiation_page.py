@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import cast
 from uuid import UUID
 
 from flask import Blueprint, render_template, redirect, request, jsonify
@@ -46,7 +47,10 @@ def negotiation_page(negotiation_service: NegotiationService, assistant: Assista
         if negotiation is None:
             return redirect('/')
 
-        request_body = request.get_json(silent=True)
+        request_body = cast(
+            dict[str, str],
+            request.get_json(silent=True)
+        )
 
         content = request_body['content']
         reply = assistant.reply(negotiation.with_message(role='user', content=content))
