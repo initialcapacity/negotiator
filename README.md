@@ -17,7 +17,7 @@
 
 1.  Build the frontend and watch for changes
     ```shell
-    make frontend/watch
+    make web-components/watch
     ```
 
 1.  Run the app
@@ -25,5 +25,5 @@
     cp .env.example .env
     vi .env
     source .env
-    make run
+    make negotiator/run
     ```
