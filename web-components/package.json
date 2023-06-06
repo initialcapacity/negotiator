@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && cp dist/assets/index*.js ../negotiator/static/js/webcomponents.js && cp dist/assets/index*.css ../negotiator/static/css/webcomponents.css",
+    "build": "tsc && vite build",
+    "build:watch": "tsc && vite build --watch",
     "test": "web-test-runner \"test/**/*.test.ts\" --node-resolve"
   },
   "dependencies": {

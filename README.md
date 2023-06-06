@@ -15,9 +15,9 @@
     make migrate migrate-test
     ```
 
-1.  Build the frontend
+1.  Build the frontend and watch for changes
     ```shell
-    make frontend/build
+    make frontend/watch
     ```
 
 1.  Run the app

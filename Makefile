@@ -17,6 +17,11 @@ frontend/build:
 	cd web-components; \
 	npm run build
 
+.PHONY: frontend/watch
+frontend/watch:
+	cd web-components; \
+	npm run build:watch
+
 .PHONY: frontend/test
 frontend/test:
 	cd web-components; \
