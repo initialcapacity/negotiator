@@ -15,7 +15,11 @@
     "@open-wc/testing": "^3.1.8",
     "@remcovaes/web-test-runner-vite-plugin": "^1.1.5",
     "@web/test-runner": "^0.16.1",
+    "msw": "^1.2.1",
     "typescript": "^5.0.2",
     "vite": "^4.3.2"
+  },
+  "msw": {
+    "workerDirectory": ""
   }
 }
