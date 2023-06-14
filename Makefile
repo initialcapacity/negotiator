@@ -9,23 +9,19 @@ help:
 
 .PHONY: web-components/install
 web-components/install:
-	cd web-components; \
-	npm install
+	npm install --prefix web-components
 
 .PHONY: web-components/build
 web-components/build:
-	cd web-components; \
-	npm run build
+	npm run build --prefix web-components
 
 .PHONY: web-components/watch
 web-components/watch:
-	cd web-components; \
-	npm run build:watch
+	npm run build:watch --prefix web-components
 
 .PHONY: web-components/test
 web-components/test:
-	cd web-components; \
-	npm run test
+	npm run test --prefix web-components
 
 .PHONY: negotiator/run
 negotiator/run:
