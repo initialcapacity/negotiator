@@ -34,7 +34,6 @@ describe('negotiation-chat', () => {
             }></negotiation-chat>
         `)
 
-
         element.querySelector('input').value = 'user message'
         element.querySelector('button').click()
 
