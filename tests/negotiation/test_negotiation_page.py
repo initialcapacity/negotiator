@@ -29,8 +29,14 @@ class TestNegotiationPage(TestCase):
         self.test_client = test_client(blueprint)
         self.negotiation_id = service.create()
 
-    def test_create(self):
+    def test_index(self):
         response = self.test_client.get('/')
+
+        self.assertEqual(200, response.status_code)
+        self.assertIn('Get started', response.text)
+
+    def test_create(self):
+        response = self.test_client.post('/negotiation')
 
         self.assertEqual(302, response.status_code)
 

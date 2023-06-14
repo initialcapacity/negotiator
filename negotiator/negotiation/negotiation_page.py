@@ -25,6 +25,10 @@ def negotiation_page(negotiation_service: NegotiationService, assistant: Assista
     page = Blueprint('negotiation_page', __name__)
 
     @page.get('/')
+    def index() -> ResponseReturnValue:
+        return render_template('index.html')
+
+    @page.post('/negotiation')
     def create() -> ResponseReturnValue:
         negotiation_id = negotiation_service.create()
         return redirect(f'/negotiation/{negotiation_id}')

@@ -25,7 +25,6 @@ web-components/test:
 
 .PHONY: negotiator/run
 negotiator/run:
-	cd negotiator; \
 	poetry run python -m negotiator;
 
 .PHONY: migrate

@@ -11,11 +11,3 @@ chat-input input {
     border-radius: 1rem;
     border: 1px solid var(--border-color);
 }
-
-chat-input button {
-    padding: .5rem .7rem;
-    border-radius: 1rem;
-    background-color: var(--main-bubble-background);
-    color: var(--contrast-text-color);
-    border: none;
-}

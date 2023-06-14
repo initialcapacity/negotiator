@@ -36,3 +36,26 @@ main {
     max-width: 30rem;
     margin: 1rem auto;
 }
+
+button {
+    padding: .5rem .7rem;
+    border-radius: 1rem;
+    background-color: var(--main-bubble-background);
+    color: var(--contrast-text-color);
+    border: none;
+    font-size: 1rem;
+    cursor: pointer
+}
+
+button.large {
+    padding: 1rem 1.4rem;
+    border-radius: 2rem;
+    font-size: 2rem;
+}
+
+.centered {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 10rem;
+}

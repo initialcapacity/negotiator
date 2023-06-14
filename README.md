@@ -36,12 +36,13 @@ This approach allows for the simplicity of server side rendered app with the dyn
     cp .env.example .env
     vi .env
     source .env
-    make negotiator/run
+    poetry run python -m negotiator
     ```
 
 ## Test
 
 ```shell
-make negotiator/test
+poetry run mypy negotiator tests
+poetry run python -m unittest
 npm run test --prefix web-components
 ```
