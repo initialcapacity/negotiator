@@ -57,3 +57,7 @@ chat-messages .message.pending {
     align-items: center;
     width: fit-content;
 }
+
+chat-messages .message.pending:before {
+    display: none;
+}
