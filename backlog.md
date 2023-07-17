@@ -1,6 +1,4 @@
-- [ ] Database
 - [ ] Deploy
-- [ ] Tests
 - [ ] Make an offer & outcome
 - [ ] Get advice 
 - [ ] Get a negotiation score
