@@ -70,4 +70,6 @@ async function waitForPromiseToResolve() {
     await nextFrame();
     await nextFrame();
     await nextFrame();
+    await nextFrame();
+    await nextFrame();
 }

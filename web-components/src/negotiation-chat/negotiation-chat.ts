@@ -48,11 +48,10 @@ export class NegotiationChatComponent extends LitElement {
 
     private handleReset = async (e: CustomEvent<ResetToMessage>) => {
         let messageId = e.detail.id;
-        console.log(`reset ${messageId}`)
-
-        const response = await fetch(`/negotiation/${this.negotiation.id}/messages/${messageId}/reset`, {
-            method: "POST"
-        });
+        const response = await fetch(
+            `/negotiation/${this.negotiation.id}/messages/${messageId}/reset`,
+            {method: "POST"}
+        );
 
         if (response.status === 204) {
             this.negotiation = truncateAt(this.negotiation, messageId)
