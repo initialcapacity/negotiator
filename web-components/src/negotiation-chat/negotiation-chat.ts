@@ -1,8 +1,15 @@
 import {customElement, property, state} from "lit/decorators.js";
 import {html, LitElement} from "lit";
-import {Message, Negotiation} from "../negotiation/negotiation.ts";
+import {
+    addMessage,
+    Message,
+    Negotiation,
+    removeLastMessage,
+    removeLastPendingMessage, truncateAt
+} from "../negotiation/negotiation.ts";
 import './negotiation-chat.css'
 import {AddMessage} from "../chat-input/chat-input.ts";
+import {ResetToMessage} from "../chat-messages/chat-messages.ts";
 
 @customElement('negotiation-chat')
 export class NegotiationChatComponent extends LitElement {
@@ -17,35 +24,12 @@ export class NegotiationChatComponent extends LitElement {
         return this;
     }
 
-    private addMessage = (message: Message) => {
-        this.negotiation = {
-            ...this.negotiation,
-            messages: [...this.negotiation.messages, message]
-        }
-    }
-
-    private removeLastMessage = () => {
-        this.negotiation = {
-            ...this.negotiation,
-            messages: this.negotiation.messages.slice(0, -1)
-        }
-    }
-
-    private removeLastPendingMessage = () => {
-        const lastMessage = this.negotiation.messages[this.negotiation.messages.length - 1]
-
-        if ('pending' in lastMessage) {
-            this.removeLastMessage()
-        }
-    }
-
     private handleAddMessage = async (e: CustomEvent<AddMessage>) => {
         this.message = ''
-        const message: Message = {role: "user", content: e.detail.content};
-        this.addMessage(message)
-        this.addMessage({role: "assistant", pending: true})
+        const message: Message = {id: crypto.randomUUID(), role: "user", content: e.detail.content};
+        this.negotiation = addMessage(this.negotiation, message, {role: "assistant", pending: true})
 
-        const response = await fetch(`/negotiation/${this.negotiation.id}/message`, {
+        const response = await fetch(`/negotiation/${this.negotiation.id}/messages`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(message),
@@ -53,18 +37,33 @@ export class NegotiationChatComponent extends LitElement {
 
         if (response.status === 201) {
             const reply = await response.json()
-            this.removeLastPendingMessage()
-            this.addMessage(reply)
+            this.negotiation = removeLastPendingMessage(this.negotiation)
+            this.negotiation = addMessage(this.negotiation, reply)
         } else {
-            this.removeLastPendingMessage()
-            this.removeLastMessage()
+            this.negotiation = removeLastPendingMessage(this.negotiation)
+            this.negotiation = removeLastMessage(this.negotiation)
             this.message = e.detail.content
+        }
+    }
+
+    private handleReset = async (e: CustomEvent<ResetToMessage>) => {
+        let messageId = e.detail.id;
+        console.log(`reset ${messageId}`)
+
+        const response = await fetch(`/negotiation/${this.negotiation.id}/messages/${messageId}/reset`, {
+            method: "POST"
+        });
+
+        if (response.status === 204) {
+            this.negotiation = truncateAt(this.negotiation, messageId)
+        } else {
+            console.error(`problem resetting to message ${messageId}`)
         }
     }
 
     render() {
         return html`
-            <chat-messages .messages=${this.negotiation.messages}></chat-messages>
+            <chat-messages .messages=${this.negotiation.messages} @reset-to-message=${this.handleReset}></chat-messages>
             <chat-input @add-message=${this.handleAddMessage} message=${this.message}></chat-input>
         `
     }

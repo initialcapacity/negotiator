@@ -16,20 +16,14 @@ class Message:
 
 
 @dataclass
-class NewMessage:
-    role: str
-    content: str
-
-
-@dataclass
 class Negotiation:
     id: UUID
     messages: list[Message]
 
-    def with_message(self, role: str, content: str) -> 'Negotiation':
+    def with_message(self, message: Message) -> 'Negotiation':
         return Negotiation(
             id=self.id,
-            messages=[*self.messages, Message(id=uuid4(), role=role, content=content)]
+            messages=[*self.messages, message]
         )
 
 
@@ -61,8 +55,14 @@ class NegotiationService:
             ]
         )
 
-    def add_messages(self, negotiation_id: UUID, messages: List[NewMessage]):
+    def add_messages(self, negotiation_id: UUID, messages: List[Message]):
         self.__db.transaction(self.__create_messages(negotiation_id, messages))
+
+    def truncate(self, negotiation_id: UUID, at_message_id: UUID) -> None:
+        self.__message_gateway.truncate_for_negotiation(
+            negotiation_id=negotiation_id,
+            at_message_id=at_message_id,
+        )
 
     def __create_negotiation(self, connection: Connection) -> Optional[UUID]:
         system_message = """
@@ -86,8 +86,8 @@ class NegotiationService:
             connection.rollback()
             return None
 
-        self.__message_gateway.create(negotiation_id, 'system', system_message, connection)
-        self.__message_gateway.create(negotiation_id, 'assistant', assistant_message, connection)
+        self.__message_gateway.create(negotiation_id, uuid4(), 'system', system_message, connection)
+        self.__message_gateway.create(negotiation_id, uuid4(), 'assistant', assistant_message, connection)
 
         return negotiation_id
 
@@ -106,11 +106,12 @@ class NegotiationService:
 
         return find_this_negotiation
 
-    def __create_messages(self, negotiation_id: UUID, messages: List[NewMessage]) -> Callable[[Connection], None]:
+    def __create_messages(self, negotiation_id: UUID, messages: List[Message]) -> Callable[[Connection], None]:
         def create_these_messages(connection: Connection):
             for message in messages:
                 self.__message_gateway.create(
                     negotiation_id=negotiation_id,
+                    id=message.id,
                     role=message.role,
                     content=message.content,
                     connection=connection,

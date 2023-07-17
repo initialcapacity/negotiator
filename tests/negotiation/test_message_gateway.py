@@ -1,4 +1,6 @@
+import uuid
 from unittest import TestCase
+from uuid import UUID
 
 from negotiator.negotiation.message_gateway import MessageGateway, MessageRecord
 from negotiator.negotiation.negotiation_gateway import NegotiationGateway
@@ -18,6 +20,7 @@ class TestMessageGateway(TestCase):
         negotiation_id = self.negotiation_gateway.create()
 
         message_id = self.gateway.create(
+            id=UUID('11111111-7981-4e69-b44e-c21b3f88213b'),
             negotiation_id=negotiation_id,
             role='user',
             content='some content'
@@ -36,20 +39,65 @@ class TestMessageGateway(TestCase):
         negotiation_id = self.negotiation_gateway.create()
         other_negotiation_id = self.negotiation_gateway.create()
 
-        user_message_id = self.gateway.create(negotiation_id=negotiation_id, role='user', content='user content')
-        system_message_id = self.gateway.create(negotiation_id=negotiation_id, role='system', content='system content')
-        self.gateway.create(negotiation_id=other_negotiation_id, role='user', content='other user content')
+        self.gateway.create(
+            id=UUID('00000000-7981-4e69-b44e-c21b3f88213b'),
+            negotiation_id=negotiation_id,
+            role='user',
+            content='user content',
+        )
+        self.gateway.create(
+            id=UUID('11111111-7981-4e69-b44e-c21b3f88213b'),
+            negotiation_id=negotiation_id,
+            role='system',
+            content='system content'
+        )
+        self.gateway.create(
+            id=uuid.uuid4(),
+            negotiation_id=other_negotiation_id,
+            role='user',
+            content='other user content'
+        )
 
         result = self.gateway.list_for_negotiation(negotiation_id)
 
         self.assertEqual([MessageRecord(
-            id=user_message_id,
+            id=UUID('00000000-7981-4e69-b44e-c21b3f88213b'),
             negotiation_id=negotiation_id,
             role='user',
             content='user content'
         ), MessageRecord(
-            id=system_message_id,
+            id=UUID('11111111-7981-4e69-b44e-c21b3f88213b'),
             negotiation_id=negotiation_id,
             role='system',
             content='system content'
+        )], result)
+
+    def test_truncate_for_negotiation(self):
+        negotiation_id = self.negotiation_gateway.create()
+
+        self.gateway.create(
+            id=UUID('00000000-7981-4e69-b44e-c21b3f88213b'),
+            negotiation_id=negotiation_id,
+            role='user',
+            content='user content',
+        )
+        self.gateway.create(
+            id=UUID('11111111-7981-4e69-b44e-c21b3f88213b'),
+            negotiation_id=negotiation_id,
+            role='assistant',
+            content='assistant content'
+        )
+
+        self.gateway.truncate_for_negotiation(
+            negotiation_id=negotiation_id,
+            at_message_id=UUID('00000000-7981-4e69-b44e-c21b3f88213b')
+        )
+
+        result = self.gateway.list_for_negotiation(negotiation_id)
+
+        self.assertEqual([MessageRecord(
+            id=UUID('00000000-7981-4e69-b44e-c21b3f88213b'),
+            negotiation_id=negotiation_id,
+            role='user',
+            content='user content'
         )], result)

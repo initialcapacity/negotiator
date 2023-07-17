@@ -4,7 +4,7 @@ from uuid import UUID
 
 from negotiator.negotiation.message_gateway import MessageGateway
 from negotiator.negotiation.negotiation_gateway import NegotiationGateway
-from negotiator.negotiation.negotiation_service import NegotiationService, Negotiation, NewMessage
+from negotiator.negotiation.negotiation_service import NegotiationService, Negotiation, Message
 from tests.db_test_support import test_db_template
 
 
@@ -54,8 +54,8 @@ class TestNegotiationService(TestCase):
         negotiation_id = self.service.create()
 
         self.service.add_messages(negotiation_id, [
-            NewMessage('user', 'user content'),
-            NewMessage('assistant', 'assistant content'),
+            Message(UUID('11111111-0b3f-430e-8b86-884a2c5d9bc9'), 'user', 'user content'),
+            Message(UUID('22222222-0b3f-430e-8b86-884a2c5d9bc9'), 'assistant', 'assistant content'),
         ])
 
         result = self.service.find(negotiation_id)

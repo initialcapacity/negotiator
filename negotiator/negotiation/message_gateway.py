@@ -22,12 +22,11 @@ class MessageGateway:
     def create(
         self,
         negotiation_id: UUID,
+        id: UUID,
         role: str,
         content: str,
         connection: Optional[Connection] = None
     ) -> Optional[UUID]:
-        id = uuid4()
-
         result = self.__db.query(
             statement="""
                     insert into messages (id, negotiation_id, role, content)
@@ -64,3 +63,25 @@ class MessageGateway:
             role=cast(str, row['role']),
             content=cast(str, row['content']),
         ))
+
+    def truncate_for_negotiation(
+        self,
+        negotiation_id: UUID,
+        at_message_id: UUID,
+        connection: Optional[Connection] = None
+    ) -> None:
+        self.__db.query(
+            statement="""
+                      delete from messages
+                        where negotiation_id = :negotiation_id
+                        and id <> :message_id
+                        and message_order > (
+                            select message_order from messages
+                                where negotiation_id = :negotiation_id
+                                and id = :message_id
+                        )
+                      """,
+            connection=connection,
+            negotiation_id=negotiation_id,
+            message_id=at_message_id,
+        )

@@ -3,6 +3,10 @@ import {html, LitElement, PropertyValues} from "lit";
 import {Message} from "../negotiation/negotiation.ts";
 import './chat-messages.css'
 
+export type ResetToMessage = {
+    id: string
+}
+
 @customElement('chat-messages')
 export class ChatMessagesComponent extends LitElement {
 
@@ -16,16 +20,28 @@ export class ChatMessagesComponent extends LitElement {
     protected update(changedProperties: PropertyValues) {
         super.update(changedProperties);
 
-        this.scroll({ top: this.scrollHeight, behavior: 'smooth' });
+        this.scroll({top: this.scrollHeight, behavior: 'smooth'});
     }
 
-    private renderMessage(message: Message) {
+    private handleReset = (id: string) => {
+        return (e: Event) => {
+            e.preventDefault()
+            const event = new CustomEvent<ResetToMessage>('reset-to-message', {detail: {id}});
+            this.dispatchEvent(event);
+        }
+    }
+
+    private renderMessage = (message: Message) => {
         if ('pending' in message) {
-            return html`<div class="message ${message.role} pending">
-                <flashing-dots></flashing-dots>
-            </div>`
+            return html`
+                <div class="message ${message.role} pending">
+                    <flashing-dots></flashing-dots>
+                </div>`
         } else {
-            return html`<div class="message ${message.role}">${message.content}</div>`
+            return html`
+                <div class="message ${message.role}" @click=${this.handleReset(message.id)}>
+                    ${message.content}
+                </div>`
         }
     }
 

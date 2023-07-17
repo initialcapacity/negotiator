@@ -1,6 +1,8 @@
 import json
 import re
+from typing import cast
 from unittest import TestCase
+from uuid import UUID
 
 import responses
 
@@ -8,7 +10,7 @@ from negotiator.negotiation.assistant import Assistant
 from negotiator.negotiation.message_gateway import MessageGateway
 from negotiator.negotiation.negotiation_gateway import NegotiationGateway
 from negotiator.negotiation.negotiation_page import negotiation_page
-from negotiator.negotiation.negotiation_service import NegotiationService
+from negotiator.negotiation.negotiation_service import NegotiationService, Negotiation
 from tests.blueprint_test_support import test_client
 from tests.db_test_support import test_db_template
 
@@ -28,6 +30,7 @@ class TestNegotiationPage(TestCase):
 
         self.test_client = test_client(blueprint)
         self.negotiation_id = service.create()
+        self.first_message_id = cast(Negotiation, service.find(cast(UUID, self.negotiation_id))).messages[1].id
 
     def test_index(self):
         response = self.test_client.get('/')
@@ -66,9 +69,12 @@ class TestNegotiationPage(TestCase):
         )
 
         response = self.test_client.post(
-            f'/negotiation/{self.negotiation_id}/message',
+            f'/negotiation/{self.negotiation_id}/messages',
             headers={'Content-Type': 'application/json'},
-            data=json.dumps({'content': 'Tell me more'}),
+            data=json.dumps({
+                'content': 'Tell me more',
+                'id': '1914219c-7b81-4ac7-8edc-ee23114ac270',
+            }),
         )
 
         self.assertEqual(201, response.status_code)
@@ -77,10 +83,45 @@ class TestNegotiationPage(TestCase):
     @responses.activate
     def test_new_message__not_found(self):
         response = self.test_client.post(
-            f'/negotiation/f94a796d-d8a0-4bab-a986-98fce4348e06/message',
+            f'/negotiation/f94a796d-d8a0-4bab-a986-98fce4348e06/messages',
             headers={'Content-Type': 'application/json'},
-            data=json.dumps({'content': 'Tell me more'}),
+            data=json.dumps({
+                'content': 'Tell me more',
+                'id': '1914219c-7b81-4ac7-8edc-ee23114ac270',
+            }),
         )
 
         self.assertEqual(302, response.status_code)
         self.assertEqual('/', response.headers['Location'])
+
+    @responses.activate
+    def test_reset(self):
+        responses.post(
+            'https://openai.example.com/chat/completions',
+            json={'choices': [{'message': {
+                'content': 'I sure will',
+            }}]}
+        )
+
+        response = self.test_client.post(
+            f'/negotiation/{self.negotiation_id}/messages',
+            headers={'Content-Type': 'application/json'},
+            data=json.dumps({
+                'content': 'Tell me more',
+                'id': '1914219c-7b81-4ac7-8edc-ee23114ac270',
+            }),
+        )
+
+        self.assertEqual(201, response.status_code)
+
+        response = self.test_client.post(
+            f'/negotiation/{self.negotiation_id}/messages/{self.first_message_id}/reset'
+        )
+
+        self.assertEqual(204, response.status_code)
+
+        response = self.test_client.get(f'/negotiation/{self.negotiation_id}')
+
+        self.assertEqual(200, response.status_code)
+        self.assertIn('4Runner', response.text)
+        self.assertNotIn('I sure will', response.text)

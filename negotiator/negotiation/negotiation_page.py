@@ -1,16 +1,18 @@
 from dataclasses import dataclass
 from typing import cast
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from flask import Blueprint, render_template, redirect, request, jsonify
 from flask.typing import ResponseReturnValue
+
 from negotiator.negotiation.assistant import Assistant
-from negotiator.negotiation.negotiation_service import NegotiationService, NewMessage, Negotiation
+from negotiator.negotiation.negotiation_service import NegotiationService, Negotiation, Message
 from negotiator.web_support import json_support
 
 
 @dataclass
 class MessageInfo:
+    id: UUID
     role: str
     content: str
 
@@ -45,7 +47,7 @@ def negotiation_page(negotiation_service: NegotiationService, assistant: Assista
             negotiation_json=json_support.encode(to_info(negotiation))
         )
 
-    @page.post('/negotiation/<negotiation_id>/message')
+    @page.post('/negotiation/<negotiation_id>/messages')
     def new_message(negotiation_id: UUID) -> ResponseReturnValue:
         negotiation = negotiation_service.find(negotiation_id)
         if negotiation is None:
@@ -56,18 +58,29 @@ def negotiation_page(negotiation_service: NegotiationService, assistant: Assista
             request.get_json(silent=False)
         )
 
-        content = request_body['content']
-        reply = assistant.reply(negotiation.with_message(role='user', content=content))
+        user_message = Message(
+            id=UUID(request_body['id']),
+            content=request_body['content'],
+            role='user',
+        )
+
+        reply = assistant.reply(negotiation.with_message(user_message))
 
         negotiation_service.add_messages(negotiation_id, [
-            NewMessage(role='user', content=content),
-            NewMessage(role='assistant', content=reply),
+            user_message,
+            Message(id=uuid4(), role='assistant', content=reply),
         ])
 
         return jsonify({
             'role': 'assistant',
             'content': reply,
         }), 201
+
+    @page.post('/negotiation/<negotiation_id>/messages/<message_id>/reset')
+    def reset(negotiation_id: UUID, message_id: UUID) -> ResponseReturnValue:
+        negotiation_service.truncate(negotiation_id=negotiation_id, at_message_id=message_id)
+
+        return '', 204
 
     return page
 
@@ -76,7 +89,7 @@ def to_info(record: Negotiation) -> NegotiationInfo:
     return NegotiationInfo(
         id=record.id,
         messages=[
-            MessageInfo(role=m.role, content=m.content)
+            MessageInfo(id=m.id, role=m.role, content=m.content)
             for m in record.messages
             if m.role != 'system'
         ]
