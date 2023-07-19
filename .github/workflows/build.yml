@@ -1,0 +1,51 @@
+name: build
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14.5
+        env:
+          POSTGRES_USER: postgresql
+          POSTGRES_PASSWORD: postgresql
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: install python dependencies
+        run: |
+          curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+          curl -sSL https://install.python-poetry.org | python3 -
+          poetry install
+          npm install --prefix web-components
+      - name: install postgres client
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes postgresql-client
+      - name: create test database
+        run: |
+          psql --host localhost --username postgresql < databases/drop_and_create_databases.sql
+          make migrate migrate-test
+        env:
+          PGPASSWORD: postgresql
+      - name: run tests
+        env:
+          PORT: 8081
+          FREEPLAY_USE_FLASK_DEBUG_MODE: true
+          NEGOTIATOR_LOG_LEVEL: DEBUG
+          SECRET_KEY: 2vaR+Kp/SbVUQwZ73Uu7ul3OCCI=
+          DATABASE_URL: 'postgresql://localhost:5432/negotiator_test?user=negotiator&password=negotiator'
+        run: |
+          npm run build --prefix web-components
+          poetry run mypy negotiator tests
+          poetry run python -m unittest
+          npm run test --prefix web-components
