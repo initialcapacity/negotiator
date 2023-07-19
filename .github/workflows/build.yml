@@ -37,6 +37,7 @@ jobs:
           make migrate migrate-test
         env:
           PGPASSWORD: postgresql
+          DATABASE_URL: 'postgresql://localhost:5432/negotiator_test?user=negotiator&password=negotiator'
       - name: run tests
         env:
           PORT: 8081
