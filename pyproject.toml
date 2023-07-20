@@ -13,7 +13,9 @@ openai = "^0.27.7"
 alembic = "^1.11.1"
 psycopg2 = "^2.9.6"
 responses = "^0.23.1"
-
+fastapi = "^0.100.0"
+gunicorn = "^21.2.0"
+psycopg2-binary = "^2.9.6"
 
 [build-system]
 requires = ["poetry-core"]

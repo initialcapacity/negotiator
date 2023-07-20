@@ -39,10 +39,34 @@ This approach allows for the simplicity of server side rendered app with the dyn
     poetry run python -m negotiator
     ```
 
-## Test
+### Running tests
 
 ```shell
 poetry run mypy negotiator tests
 poetry run python -m unittest
 npm run test --prefix web-components
 ```
+
+### Using docker
+ddd
+1. Install dependencies and run via gunicorn
+    ```shell
+    poetry export --without-hashes --format=requirements.txt > requirements.txt
+    ```
+
+    ```shell 
+   pip install -r requirements.txt
+    ```
+    ```shell  
+   gunicorn -w 4 'negotiator.app:create_app()' --bind=0.0.0.0:${PORT}
+    ```
+   
+1. Pack and run via docker
+
+    ```shell 
+   pack build negotiator --builder=gcr.io/buildpacks/builder:v1
+    ```
+
+    ```shell
+   docker run -p 8081:8081 --env-file .env.docker negotiator
+    ```   

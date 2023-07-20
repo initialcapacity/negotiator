@@ -16,7 +16,7 @@ from negotiator.negotiation.negotiation_service import NegotiationService
 logger = logging.getLogger(__name__)
 
 
-def create_app(env: Environment) -> Flask:
+def create_app(env: Environment = Environment.from_env()) -> Flask:
     app = Flask(__name__)
     app.secret_key = env.secret_key
     app.config["SQLALCHEMY_DATABASE_URI"] = env.database_url

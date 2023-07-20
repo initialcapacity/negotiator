@@ -17,7 +17,7 @@ jobs:
         ports:
           - 5432:5432
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
@@ -50,3 +50,72 @@ jobs:
           poetry run mypy negotiator tests
           poetry run python -m unittest
           npm run test --prefix web-components
+  google-cloud-build:
+    runs-on: ubuntu-latest
+    needs: [test]
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: install python dependencies
+        run: |
+          curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+          npm install --prefix web-components
+#      - name: "authenticate to google cloud"
+#        uses: "google-github-actions/auth@v1"
+#        with:
+#          workload_identity_provider: "${{ secrets.GOOGLE_FEDERATION_WORKLOAD_IDENTITY_PROVIDER }}"
+#          service_account: "${{ secrets.GOOGLE_FEDERATION_SERVICE_ACCOUNT }}"
+      - name: "set up cloud sdk"
+        uses: "google-github-actions/setup-gcloud@v1"
+      - id: "gcloud"
+        name: "gcloud"
+        run: |-
+          sudo add-apt-repository ppa:cncf-buildpacks/pack-cli
+          sudo apt-get update
+          sudo apt-get install -y pack-cli
+          npm run build --prefix web-components
+          pack build negotiator --builder=gcr.io/buildpacks/builder:v1
+  google-cloud-sql:
+    runs-on: ubuntu-latest
+    needs: [google-cloud-build]
+    steps:
+      - uses: actions/checkout@v3
+#      - name: "authenticate to google cloud"
+#        uses: "google-github-actions/auth@v1"
+#        with:
+#          workload_identity_provider: "${{ secrets.GOOGLE_FEDERATION_WORKLOAD_IDENTITY_PROVIDER }}"
+#          service_account: "${{ secrets.GOOGLE_FEDERATION_SERVICE_ACCOUNT }}"
+      - name: 'set up cloud sdk'
+        uses: 'google-github-actions/setup-gcloud@v0'
+      - name: cloud-sql-proxy
+        run: |
+          curl https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.0.0-preview.0/cloud-sql-proxy.linux.amd64 --output cloud-sql-proxy
+          chmod +x cloud-sql-proxy
+          sudo mv cloud-sql-proxy /usr/bin/cloud-sql-proxy
+      - name: migrate
+        run: |
+          cloud-sql-proxy -v
+  google-cloud-run:
+    runs-on: ubuntu-latest
+    needs: [google-cloud-sql]
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      - uses: actions/checkout@v3
+#      - name: "authenticate to google cloud"
+#        uses: "google-github-actions/auth@v1"
+#        with:
+#          workload_identity_provider: "${{ secrets.GOOGLE_FEDERATION_WORKLOAD_IDENTITY_PROVIDER }}"
+#          service_account: "${{ secrets.GOOGLE_FEDERATION_SERVICE_ACCOUNT }}"
+      - name: "set up cloud sdk"
+        uses: "google-github-actions/setup-gcloud@v1"
+      - id: "gcloud"
+        name: "gcloud"
+        run: |-
+          echo "gcloud run"
