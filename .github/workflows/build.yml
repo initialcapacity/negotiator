@@ -47,9 +47,9 @@ jobs:
           DATABASE_URL: 'postgresql://localhost:5432/negotiator_test?user=negotiator&password=negotiator'
         run: |
           npm run build --prefix web-components
+          npm run test --prefix web-components
           poetry run mypy negotiator tests
           poetry run python -m unittest
-          npm run test --prefix web-components
   google-cloud-build:
     runs-on: ubuntu-latest
     needs: [test]
@@ -64,6 +64,8 @@ jobs:
       - name: install python dependencies
         run: |
           curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+          curl -sSL https://install.python-poetry.org | python3 -
+          poetry install
           npm install --prefix web-components
 #      - name: "authenticate to google cloud"
 #        uses: "google-github-actions/auth@v1"
@@ -79,6 +81,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y pack-cli
           npm run build --prefix web-components
+          poetry export --without-hashes --format=requirements.txt > requirements.txt
           pack build negotiator --builder=gcr.io/buildpacks/builder:v1
   google-cloud-sql:
     runs-on: ubuntu-latest

@@ -47,8 +47,8 @@ poetry run python -m unittest
 npm run test --prefix web-components
 ```
 
-### Using docker
-ddd
+### Running without poetry
+
 1. Install dependencies and run via gunicorn
     ```shell
     poetry export --without-hashes --format=requirements.txt > requirements.txt
@@ -57,11 +57,15 @@ ddd
     ```shell 
    pip install -r requirements.txt
     ```
+
     ```shell  
    gunicorn -w 4 'negotiator.app:create_app()' --bind=0.0.0.0:${PORT}
     ```
    
 1. Pack and run via docker
+    ```shell
+    poetry export --without-hashes --format=requirements.txt > requirements.txt
+    ```
 
     ```shell 
    pack build negotiator --builder=gcr.io/buildpacks/builder:v1

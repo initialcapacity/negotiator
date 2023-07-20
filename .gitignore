@@ -3,3 +3,4 @@
 node_modules
 negotiator/static/web-components
 __pycache__
+requirements.txt
