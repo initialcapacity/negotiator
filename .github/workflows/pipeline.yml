@@ -1,4 +1,4 @@
-name: build
+name: pipeline
 on: push
 jobs:
   test:
@@ -81,6 +81,7 @@ jobs:
           npm run build --prefix web-components
           poetry export --without-hashes --format=requirements.txt > requirements.txt
           pack build negotiator --builder=gcr.io/buildpacks/builder:v1
+          gcloud auth configure-docker us-central1-docker.pkg.dev
           docker push us-central1-docker.pkg.dev/${{ secrets.GOOGLE_PROJECT_ID }}/negotiator-review/negotiator:${{ github.sha }}
   google-cloud-sql:
     runs-on: ubuntu-latest
