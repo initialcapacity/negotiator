@@ -116,7 +116,7 @@ jobs:
           sudo mv cloud-sql-proxy /usr/bin/cloud-sql-proxy
       - name: migrate
         env:
-          DATABASE_URL: 'postgresql://127.0.0.1:6000/negotiator_review?user=negotiator&password=negotiator'
+          DATABASE_URL: ${{ secrets.REVIEW_MIGRATE_URL }}
         run: |
           cloud-sql-proxy --port 6000 ${{ secrets.GOOGLE_PROJECT_ID }}:us-central1:negotiator-review &
           sleep 6          
