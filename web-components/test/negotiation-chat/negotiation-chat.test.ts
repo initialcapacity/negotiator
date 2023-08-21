@@ -14,12 +14,11 @@ describe('negotiation-chat', () => {
     )
 
     beforeEach(async () => {
-        await worker.start({quiet: true})
+        await worker.start({quiet: true, waitUntilReady: true})
     })
 
     afterEach(() => {
         worker.resetHandlers()
-        worker.stop()
     })
 
     it('renders replies', async () => {
