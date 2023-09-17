@@ -72,7 +72,9 @@ class TestNegotiationPage(TestCase):
         )
 
         self.assertEqual(201, response.status_code)
-        self.assertEqual({'role': 'assistant', 'content': 'I sure will'}, response.json)
+        self.assertIsNotNone(response.json['id'])
+        self.assertEqual('assistant', response.json['role'])
+        self.assertEqual('I sure will', response.json['content'])
 
     @responses.activate
     def test_new_message__not_found(self):

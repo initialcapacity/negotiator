@@ -67,12 +67,14 @@ def negotiation_page(negotiation_service: NegotiationService, assistant: Assista
 
         reply = assistant.reply(negotiation.with_message(user_message))
 
+        reply_id = uuid4()
         negotiation_service.add_messages(negotiation_id, [
             user_message,
-            Message(id=uuid4(), role='assistant', content=reply),
+            Message(id=reply_id, role='assistant', content=reply),
         ])
 
         return jsonify({
+            'id': reply_id,
             'role': 'assistant',
             'content': reply,
         }), 201
