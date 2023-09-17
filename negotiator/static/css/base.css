@@ -24,6 +24,12 @@ header {
 
 header h1 {
     font-weight: 500;
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+header a {
+    text-decoration: none;
 }
 
 header nav {
