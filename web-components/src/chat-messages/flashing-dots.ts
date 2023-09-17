@@ -39,11 +39,9 @@ export class FlashingDotsComponent extends LitElement {
       }
     `
 
-    render() {
-        return html`
+    render = () => html`
             <div class="left dot"></div>
             <div class="middle dot"></div>
             <div class="right dot"></div>
-        `
-    }
+        `;
 }

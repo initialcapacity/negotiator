@@ -20,9 +20,7 @@ export class NegotiationChatComponent extends LitElement {
     @state()
     message = ''
 
-    createRenderRoot() {
-        return this;
-    }
+    createRenderRoot = () => this;
 
     private handleAddMessage = async (e: CustomEvent<AddMessage>) => {
         this.message = ''
@@ -60,10 +58,14 @@ export class NegotiationChatComponent extends LitElement {
         }
     }
 
-    render() {
-        return html`
-            <chat-messages .messages=${this.negotiation.messages} @reset-to-message=${this.handleReset}></chat-messages>
-            <chat-input @add-message=${this.handleAddMessage} message=${this.message}></chat-input>
-        `
-    }
+    render = () => html`
+        <chat-messages
+                .messages=${this.negotiation.messages}
+                @reset-to-message=${this.handleReset}
+        ></chat-messages>
+        <chat-input
+                @add-message=${this.handleAddMessage}
+                .message=${this.message}
+        ></chat-input>
+    `;
 }

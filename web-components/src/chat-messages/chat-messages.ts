@@ -13,9 +13,7 @@ export class ChatMessagesComponent extends LitElement {
     @property({attribute: 'messages', type: Array})
     messages: Message[] = [];
 
-    createRenderRoot() {
-        return this;
-    }
+    createRenderRoot = () => this;
 
     protected update(changedProperties: PropertyValues) {
         super.update(changedProperties);
@@ -31,21 +29,16 @@ export class ChatMessagesComponent extends LitElement {
         }
     }
 
-    private renderMessage = (message: Message) => {
-        if ('pending' in message) {
-            return html`
-                <div class="message ${message.role} pending">
-                    <flashing-dots></flashing-dots>
-                </div>`
-        } else {
-            return html`
-                <div class="message ${message.role}" @click=${this.handleReset(message.id)}>
-                    ${message.content}
-                </div>`
-        }
-    }
+    private renderMessage = (message: Message) =>
+        'pending' in message
+            ? html`
+                    <div class="message ${message.role} pending">
+                        <flashing-dots></flashing-dots>
+                    </div>`
+            : html`
+                    <div class="message ${message.role}" @click=${this.handleReset(message.id)}>
+                        ${message.content}
+                    </div>`
 
-    render() {
-        return this.messages.map(this.renderMessage)
-    }
+    render = () => this.messages.map(this.renderMessage);
 }

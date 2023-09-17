@@ -27,16 +27,12 @@ export class ChatInputComponent extends LitElement {
         this.messageInputRef.value!.value = ''
     }
 
-    createRenderRoot() {
-        return this;
-    }
+    createRenderRoot = () => this;
 
-    render() {
-        return html`
-            <form @submit=${this.handleSubmit}>
-                <input ${ref(this.messageInputRef)} type="text" value=${this.message}>
-                <button type="submit">Send</button>
-            </form>
-        `
-    }
+    render = () => html`
+        <form @submit=${this.handleSubmit}>
+            <input ${ref(this.messageInputRef)} type="text" value=${this.message}>
+            <button type="submit">Send</button>
+        </form>
+    `;
 }
