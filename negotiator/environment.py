@@ -8,20 +8,12 @@ class Environment:
     secret_key: str
     database_url: str
     openai_api_key: str
+    client_id: str
+    client_secret: str
+    host_url: str
+    allowed_domains: str
+    allowed_addresses: str
     use_flask_debug_mode: bool
-
-    def __init__(self,
-                 port: int,
-                 secret_key: str,
-                 database_url: str,
-                 openai_api_key: str,
-                 use_flask_debug_mode: bool,
-                 ) -> None:
-        self.port = port
-        self.secret_key = secret_key
-        self.database_url = database_url
-        self.openai_api_key = openai_api_key
-        self.use_flask_debug_mode = use_flask_debug_mode
 
     @classmethod
     def from_env(cls) -> 'Environment':
@@ -30,7 +22,12 @@ class Environment:
             secret_key=cls.__require_env('SECRET_KEY'),
             database_url=cls.__require_env('DATABASE_URL'),
             openai_api_key=cls.__require_env('OPENAI_API_KEY'),
-            use_flask_debug_mode=os.environ.get('FREEPLAY_USE_FLASK_DEBUG_MODE', 'false') == 'true',
+            client_id=cls.__require_env('CLIENT_ID'),
+            client_secret=cls.__require_env('CLIENT_SECRET'),
+            host_url=cls.__require_env('HOST_URL'),
+            allowed_domains=os.environ.get('ALLOWED_DOMAINS', ""),
+            allowed_addresses=os.environ.get('ALLOWED_ADDRESSES', ""),
+            use_flask_debug_mode=os.environ.get('USE_FLASK_DEBUG_MODE', 'false') == 'true',
         )
 
     @classmethod

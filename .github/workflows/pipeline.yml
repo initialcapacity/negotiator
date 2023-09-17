@@ -41,7 +41,7 @@ jobs:
       - name: run tests
         env:
           PORT: 8081
-          FREEPLAY_USE_FLASK_DEBUG_MODE: true
+          USE_FLASK_DEBUG_MODE: true
           NEGOTIATOR_LOG_LEVEL: DEBUG
           SECRET_KEY: 2vaR+Kp/SbVUQwZ73Uu7ul3OCCI=
           DATABASE_URL: 'postgresql://localhost:5432/negotiator_test?user=negotiator&password=negotiator'

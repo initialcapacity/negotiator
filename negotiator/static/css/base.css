@@ -18,12 +18,18 @@ body {
 header {
     height: 3rem;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 
 header h1 {
     font-weight: 500;
+}
+
+header nav {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
 }
 
 main {
@@ -37,17 +43,18 @@ main {
     margin: 1rem auto;
 }
 
-button {
+button, .button {
     padding: .5rem .7rem;
     border-radius: 1rem;
     background-color: var(--main-bubble-background);
     color: var(--contrast-text-color);
     border: none;
     font-size: 1rem;
-    cursor: pointer
+    cursor: pointer;
+    text-decoration: none;
 }
 
-button.large {
+button.large, .button.large {
     padding: 1rem 1.4rem;
     border-radius: 2rem;
     font-size: 2rem;

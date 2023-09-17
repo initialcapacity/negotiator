@@ -3,7 +3,13 @@
 {% block title %}Negotiator{% endblock %}
 
 {% block body %}
+{% if g.username %}
 <form action="/negotiation" method="post" class="centered">
     <button type="submit" class="large">Get started!</button>
 </form>
+{% else %}
+<div class="centered">
+    <a href="/authenticate" class="button large">Log in</a>
+</div>
+{% endif %}
 {% endblock %}

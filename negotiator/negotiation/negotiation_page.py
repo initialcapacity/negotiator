@@ -1,10 +1,11 @@
 from dataclasses import dataclass
-from typing import cast
+from typing import cast, Optional
 from uuid import UUID, uuid4
 
 from flask import Blueprint, render_template, redirect, request, jsonify
 from flask.typing import ResponseReturnValue
 
+from negotiator.authentication.authenticate_user import authenticate_user
 from negotiator.negotiation.assistant import Assistant
 from negotiator.negotiation.negotiation_service import NegotiationService, Negotiation, Message
 from negotiator.web_support import json_support
@@ -26,9 +27,9 @@ class NegotiationInfo:
 def negotiation_page(negotiation_service: NegotiationService, assistant: Assistant) -> Blueprint:
     page = Blueprint('negotiation_page', __name__)
 
-    @page.get('/')
-    def index() -> ResponseReturnValue:
-        return render_template('index.html')
+    @page.before_request
+    def authenticate_user_filter() -> Optional[ResponseReturnValue]:
+        return authenticate_user()
 
     @page.post('/negotiation')
     def create() -> ResponseReturnValue:
