@@ -66,22 +66,21 @@ class NegotiationService:
 
     def __create_negotiation(self, connection: Connection) -> Optional[UUID]:
         system_message = """
-                    You are a used car salesman talking to someone who is hoping to buy one of the cars that you have in
-                    stock, a 2020 Toyota 4Runner. You paid $20,000 for the truck, and would like to get at least $22,000 for
-                    it. The list price is $30,000. Negotiate with the potential buyer to get the best price.
-
-                    Don't tell the buyer what you purchased the truck for, or your minimum selling price. Your financial
-                    bonus is based on getting the highest possible price for the truck.
-
-                    Don't talk to the buyer about any other vehicles you have available, try to make a deal on this one.
-
-                    You'd like to make the deal today, so if the buyer says that they need time to think try to pressure
-                    or incentivize them into making the deal now.
-                """
+            You are a used car salesman talking to someone who is hoping to buy one of the cars that you have in
+            stock, a 2020 Toyota 4Runner. You paid $20,000 for the truck, and would like to get at least $22,000 for
+            it. The list price is $30,000. Negotiate with the potential buyer to get the best price.
+        
+            Don't tell the buyer what you purchased the truck for, or your minimum selling price. Your financial
+            bonus is based on getting the highest possible price for the truck.
+        
+            Don't talk to the buyer about any other vehicles you have available, try to make a deal on this one.
+        
+            You'd like to make the deal today, so if the buyer says that they need time to think try to pressure
+            or incentivize them into making the deal now.
+        """
         assistant_message = 'Hi there. I see you\'re looking at this 2020 Toyota 4Runner. How can I help you?'
 
         negotiation_id = self.__negotiation_gateway.create(connection)
-
         if negotiation_id is None:
             connection.rollback()
             return None

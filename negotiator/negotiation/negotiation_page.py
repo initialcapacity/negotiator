@@ -54,10 +54,7 @@ def negotiation_page(negotiation_service: NegotiationService, assistant: Assista
         if negotiation is None:
             return redirect('/')
 
-        request_body = cast(
-            dict[str, str],
-            request.get_json(silent=False)
-        )
+        request_body = cast(dict[str, str], request.get_json(silent=False))
 
         user_message = Message(
             id=UUID(request_body['id']),
