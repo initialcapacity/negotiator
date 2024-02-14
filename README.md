@@ -17,14 +17,21 @@ This approach allows for the simplicity of server side rendered app with the dyn
     ```shell
     brew install pyenv nodejs postgresql@14
     pyenv install 3.11
-    # Add pyenv to the path
     pyenv init
+    # Manually configure pyenv to load automatically
     pyenv shell 3.11
     curl -sSL https://install.python-poetry.org | python3 -
-    # Add poetry to the path
+    # Manually add poetry to the path
     poetry env use 3.11
     poetry install
     npm install --prefix web-components
+    ```
+
+1.  Set up the environment
+    ```shell
+    cp .env.example .env
+    vi .env
+    source .env
     ```
 
 1.  Set up the database
@@ -40,8 +47,6 @@ This approach allows for the simplicity of server side rendered app with the dyn
 
 1.  Run the app in a separate terminal
     ```shell
-    cp .env.example .env
-    vi .env
     source .env
     poetry run python -m negotiator
     ```
