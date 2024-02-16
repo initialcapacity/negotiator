@@ -4,7 +4,6 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
     "build": "tsc && vite build",
     "build:watch": "tsc && vite build --watch",
     "test": "web-test-runner \"test/**/*.test.ts\" --node-resolve"
