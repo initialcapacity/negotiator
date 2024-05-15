@@ -36,7 +36,7 @@ class TestAssistant(TestCase):
         self.assertEqual(
             {
                 'messages': [{'content': 'user content', 'role': 'user'}],
-                'model': 'gpt-4'
+                'model': 'gpt-4o'
             },
             json.loads(recorded_request.body)
         )

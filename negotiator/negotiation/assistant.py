@@ -6,7 +6,7 @@ from negotiator.negotiation.negotiation_service import Negotiation
 class Assistant:
     def reply(self, negotiation: Negotiation) -> str:
         chat_completion = openai.ChatCompletion.create(
-            model="gpt-4",
+            model="gpt-4o",
             messages=self.__messages_from(negotiation)
         )
 
