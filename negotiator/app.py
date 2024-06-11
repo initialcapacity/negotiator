@@ -1,12 +1,10 @@
 import logging
 
-import openai
 import sqlalchemy
 from flask import Flask
 
 from negotiator.authentication.allowed_emails import AllowedEmails
 from negotiator.database_support.database_template import DatabaseTemplate
-
 from negotiator.environment import Environment
 from negotiator.health_api import health_api
 from negotiator.index_page import index_page
@@ -25,7 +23,6 @@ def create_app(env: Environment = Environment.from_env()) -> Flask:
     app = Flask(__name__)
     app.secret_key = env.secret_key
     app.config["SQLALCHEMY_DATABASE_URI"] = env.database_url
-    openai.api_key = env.openai_api_key
 
     db = sqlalchemy.create_engine(env.database_url, pool_size=4)
     db_template = DatabaseTemplate(db)
@@ -38,7 +35,10 @@ def create_app(env: Environment = Environment.from_env()) -> Flask:
     allowed_emails = AllowedEmails(domains=env.allowed_domains, addresses=env.allowed_addresses)
 
     app.register_blueprint(index_page())
-    app.register_blueprint(negotiation_page(negotiation_service, Assistant()))
+    app.register_blueprint(negotiation_page(negotiation_service, Assistant(
+        api_key=env.openai_api_key,
+        base_url="https://api.openai.com/v1/"
+    )))
     app.register_blueprint(oauth_api(oauth_client, allowed_emails))
     app.register_blueprint(health_api())
 

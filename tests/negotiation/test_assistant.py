@@ -12,7 +12,10 @@ class TestAssistant(TestCase):
 
     @responses.activate
     def test_reply(self):
-        assistant = Assistant()
+        assistant = Assistant(
+            api_key="some_api_key",
+            base_url="https://openai.example.com",
+        )
 
         completions_endpoint = responses.post(
             'https://openai.example.com/chat/completions',

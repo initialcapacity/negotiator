@@ -25,23 +25,23 @@ web-components/test:
 
 .PHONY: negotiator/run
 negotiator/run:
-	poetry run python -m negotiator;
+	source venv/bin/activate && python -m negotiator;
 
 .PHONY: migrate
 migrate:
-	poetry run alembic upgrade head
+	source venv/bin/activate && alembic upgrade head
 
 .PHONY: migrate-test
 migrate-test:
-	DATABASE_URL='postgresql://localhost:5432/negotiator_test?user=negotiator&password=negotiator' poetry run alembic upgrade head
+	source venv/bin/activate && DATABASE_URL='postgresql://localhost:5432/negotiator_test?user=negotiator&password=negotiator' alembic upgrade head
 
 .PHONY: negotiator/type-checks
 negotiator/type-checks:
-	poetry run mypy negotiator tests;
+	source venv/bin/activate && mypy negotiator tests;
 
 .PHONY: negotiator/test
 negotiator/test: negotiator/type-checks
-	poetry run python -m unittest;
+	source venv/bin/activate && python -m unittest;
 
 .PHONY: test
 test: negotiator/test web-components/test

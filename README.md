@@ -15,15 +15,9 @@ This approach allows for the simplicity of server side rendered app with the dyn
 
 1.  Install python and dependencies
     ```shell
-    brew install pyenv nodejs postgresql@14
-    pyenv install 3.11
-    pyenv init
-    # Manually configure pyenv to load automatically
-    pyenv shell 3.11
-    curl -sSL https://install.python-poetry.org | python3 -
-    # Manually add poetry to the path
-    poetry env use 3.11
-    poetry install
+    brew install python@3.12 nodejs postgresql@14
+    python -m venv venv
+    pip install -r requirements.txt
     npm install --prefix web-components
     ```
 

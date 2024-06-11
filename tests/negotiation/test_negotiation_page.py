@@ -26,7 +26,7 @@ class TestNegotiationPage(TestCase):
         message_gateway = MessageGateway(self.db)
 
         service = NegotiationService(self.db, negotiation_gateway, message_gateway)
-        blueprint = negotiation_page(service, Assistant())
+        blueprint = negotiation_page(service, Assistant(api_key='some-api-key', base_url='https://openai.example.com'))
 
         self.test_client = test_client(blueprint, authenticated=True)
         self.negotiation_id = service.create()
