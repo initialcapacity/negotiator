@@ -5,10 +5,12 @@ import requests
 
 
 class OAuthClient:
-    def __init__(self, client_id: str, client_secret: str, host_url: str):
+    def __init__(self, client_id: str, client_secret: str, host_url: str, oauth_url: str, user_info_url: str):
         self.__client_id = client_id
         self.__client_secret = client_secret
         self.__host_url = host_url
+        self.__oauth_url = oauth_url
+        self.__user_info_url = user_info_url
 
     def auth_url(self, state) -> str:
         query_string = urlencode({
@@ -18,10 +20,10 @@ class OAuthClient:
             'scope': 'email',
             'state': state,
         })
-        return f"https://accounts.google.com/o/oauth2/auth?{query_string}"
+        return f"{self.__oauth_url}/auth?{query_string}"
 
     def fetch_access_token(self, code: str) -> Union[None, str]:
-        response = requests.post('https://accounts.google.com/o/oauth2/token', data={
+        response = requests.post(f'{self.__oauth_url}/token', data={
             'client_id': self.__client_id,
             'client_secret': self.__client_secret,
             'code': code,
@@ -34,9 +36,8 @@ class OAuthClient:
 
         return response.json().get('access_token')
 
-    @staticmethod
-    def read_email_from_token(token: str) -> Union[None, str]:
-        response = requests.get('https://www.googleapis.com/oauth2/v3/userinfo', headers={
+    def read_email_from_token(self, token: str) -> Union[None, str]:
+        response = requests.get(self.__user_info_url, headers={
             'Authorization': f'Bearer {token}',
             'Accept': 'application/json',
         })

@@ -10,6 +10,8 @@ class Environment:
     openai_api_key: str
     client_id: str
     client_secret: str
+    oauth_url: str
+    user_info_url: str
     host_url: str
     allowed_domains: str
     allowed_addresses: str
@@ -24,6 +26,8 @@ class Environment:
             openai_api_key=cls.__require_env('OPENAI_API_KEY'),
             client_id=cls.__require_env('CLIENT_ID'),
             client_secret=cls.__require_env('CLIENT_SECRET'),
+            oauth_url=os.environ.get('OAUTH_URL', 'https://accounts.google.com/o/oauth2'),
+            user_info_url=os.environ.get('USER_INFO_URL', 'https://www.googleapis.com/oauth2/v3/userinfo'),
             host_url=cls.__require_env('HOST_URL'),
             allowed_domains=os.environ.get('ALLOWED_DOMAINS', ""),
             allowed_addresses=os.environ.get('ALLOWED_ADDRESSES', ""),

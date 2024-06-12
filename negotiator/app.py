@@ -31,7 +31,8 @@ def create_app(env: Environment = Environment.from_env()) -> Flask:
     message_gateway = MessageGateway(db_template)
     negotiation_service = NegotiationService(db_template, negotiation_gateway, message_gateway)
 
-    oauth_client = OAuthClient(client_id=env.client_id, client_secret=env.client_secret, host_url=env.host_url)
+    oauth_client = OAuthClient(client_id=env.client_id, client_secret=env.client_secret, host_url=env.host_url,
+                               oauth_url=env.oauth_url, user_info_url=env.user_info_url)
     allowed_emails = AllowedEmails(domains=env.allowed_domains, addresses=env.allowed_addresses)
 
     app.register_blueprint(index_page())
