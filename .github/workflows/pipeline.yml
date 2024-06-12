@@ -26,9 +26,11 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install -r requirements.txt
-          npm install --prefix web-components
-          npx --workspace web-components playwright install-deps chromium
-          npx --workspace web-components playwright install chromium
+          pushd web-components
+          npm install
+          npx playwright install-deps chromium
+          npx playwright install chromium
+          popd
       - name: install postgres client
         run: |
           sudo apt-get update
