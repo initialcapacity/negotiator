@@ -53,8 +53,8 @@ This approach allows for the simplicity of server side rendered app with the dyn
 ### Running tests
 
 ```shell
-poetry run mypy negotiator tests
-poetry run python -m unittest
+mypy negotiator tests
+python -m unittest
 npm run test --prefix web-components
 ```
 

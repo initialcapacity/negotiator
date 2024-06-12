@@ -1,5 +1,6 @@
 import {vitePlugin} from '@remcovaes/web-test-runner-vite-plugin';
-import {endpoints} from './test/test-server-endpoints.js'
+import {endpoints} from './test/test-server-endpoints.js';
+import { playwrightLauncher } from '@web/test-runner-playwright';
 
 const filteredLogs = [
     'Lit is in dev mode. Not recommended for production! See https://lit.dev/msg/dev-mode for more information.',
@@ -34,6 +35,7 @@ const testServerPlugin = {
     }
 };
 export default {
+    browsers: [playwrightLauncher({ product: 'chromium' })],
     filterBrowserLogs,
     staticLogging: true,
     plugins: [vitePlugin({

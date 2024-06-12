@@ -1,0 +1,34 @@
+{
+  "name": "Negotiator",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "negotiator_app",
+  "forwardPorts": [8081, 5432, 8999],
+  "postCreateCommand": "bash .devcontainer/set-up-environment.sh",
+  "runArgs": [
+    "--mount",
+    "type=volume,target=${containerWorkspaceFolder}/.idea",
+    "--mount",
+    "type=volume,target=${containerWorkspaceFolder}/venv",
+    "--mount",
+    "type=volume,target=${containerWorkspaceFolder}/web-components/node_modules"
+  ],
+  "workspaceFolder": "/workspace",
+  "containerEnv": {
+    "PORT": "8081",
+    "USE_FLASK_DEBUG_MODE": "true",
+    "NEGOTIATOR_LOG_LEVEL": "DEBUG",
+    "SECRET_KEY": "2vaR+Kp/SbVUQwZ73Uu7ul3OCCI=",
+    "DATABASE_URL": "postgresql://localhost:5432/negotiator_development?user=negotiator&password=negotiator",
+    "OPENAI_API_KEY": "fill_me_in",
+    "CLIENT_ID": "some_client_id",
+    "CLIENT_SECRET": "some_client_secret",
+    "HOST_URL": "http://localhost:8081",
+    "OAUTH_URL": "http://localhost:8999",
+    "USER_INFO_URL": "http://localhost:8999/userinfo"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "22.2.0"
+    }
+  }
+}
