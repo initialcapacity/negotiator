@@ -9,7 +9,7 @@ help:
 
 .PHONY: web-components/install
 web-components/install:
-	npm install --prefix web-components
+	npm install --prefix web-components && pushd web-components && npx playwright install-deps chromium && npx playwright install chromium && popd
 
 .PHONY: web-components/build
 web-components/build:

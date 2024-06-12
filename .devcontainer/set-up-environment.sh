@@ -9,6 +9,8 @@ PGPASSWORD=postgres psql -h localhost postgres -U postgres < databases/drop_and_
 alembic upgrade head
 DATABASE_URL="postgresql://localhost:5432/negotiator_test?user=negotiator&password=negotiator" alembic upgrade head
 
-npm run build --prefix web-components
+pushd web-components || exit
+npm run build
 npx playwright install-deps chromium
 npx playwright install chromium
+popd || exit
