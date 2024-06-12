@@ -39,10 +39,15 @@ This approach allows for the simplicity of server side rendered app with the dyn
     npm run build:watch --prefix web-components
     ```
 
+1.  Run the fake oauth server in a separate terminal
+    ```shell
+    python fake_auth_server.py
+    ```
+
 1.  Run the app in a separate terminal
     ```shell
     source .env
-    poetry run python -m negotiator
+    python -m negotiator
     ```
 
 ### Running tests
@@ -53,13 +58,9 @@ poetry run python -m unittest
 npm run test --prefix web-components
 ```
 
-### Running without poetry
+### Running with Docker
 
 1. Install dependencies and run via gunicorn
-    ```shell
-    poetry export --without-hashes --format=requirements.txt > requirements.txt
-    ```
-
     ```shell 
    pip install -r requirements.txt
     ```
@@ -69,10 +70,6 @@ npm run test --prefix web-components
     ```
    
 1. Pack and run via docker
-    ```shell
-    poetry export --without-hashes --format=requirements.txt > requirements.txt
-    ```
-
     ```shell 
    pack build negotiator --builder=gcr.io/buildpacks/builder:v1
     ```

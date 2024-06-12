@@ -27,6 +27,10 @@ web-components/test:
 negotiator/run:
 	source venv/bin/activate && python -m negotiator;
 
+.PHONY: fake-auth/run
+fake-auth/run:
+	source venv/bin/activate && python fake_auth_server.py;
+
 .PHONY: migrate
 migrate:
 	source venv/bin/activate && alembic upgrade head
