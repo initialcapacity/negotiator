@@ -24,7 +24,8 @@
     "CLIENT_SECRET": "some_client_secret",
     "HOST_URL": "http://localhost:8081",
     "OAUTH_URL": "http://localhost:8999",
-    "USER_INFO_URL": "http://localhost:8999/userinfo"
+    "USER_INFO_URL": "http://localhost:8999/userinfo",
+    "PLAYWRIGHT_BROWSERS_PATH": "/playwright-browsers"
   },
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
