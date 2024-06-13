@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -ex
+
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -16,4 +18,4 @@ npx playwright install chromium
 popd || exit
 
 # Revert any file mode changes
-git diff -p -R --no-color | grep -E "^(diff|(old|new) mode)" --color=never | git apply
+git diff -p -R --no-color | grep -E "^(diff|(old|new) mode)" --color=never | git apply --allow-empty
