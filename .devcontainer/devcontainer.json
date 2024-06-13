@@ -25,7 +25,7 @@
     "HOST_URL": "http://localhost:8081",
     "OAUTH_URL": "http://localhost:8999",
     "USER_INFO_URL": "http://localhost:8999/userinfo",
-    "PLAYWRIGHT_BROWSERS_PATH": "/playwright-browsers"
+    "PLAYWRIGHT_BROWSERS_PATH": "0"
   },
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
