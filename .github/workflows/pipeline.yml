@@ -72,11 +72,11 @@ jobs:
           source venv/bin/activate
           pip install -r requirements.txt
           npm install --prefix web-components
-      - uses: google-github-actions/auth@v1
+      - uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: "${{ secrets.GOOGLE_FEDERATION_WORKLOAD_IDENTITY_PROVIDER }}"
           service_account: "${{ secrets.GOOGLE_FEDERATION_SERVICE_ACCOUNT }}"
-      - uses: google-github-actions/setup-gcloud@v1
+      - uses: google-github-actions/setup-gcloud@v2
       - name: "build"
         run: |-
           sudo add-apt-repository ppa:cncf-buildpacks/pack-cli
@@ -106,11 +106,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --yes postgresql-client
-      - uses: google-github-actions/auth@v1
+      - uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: "${{ secrets.GOOGLE_FEDERATION_WORKLOAD_IDENTITY_PROVIDER }}"
           service_account: "${{ secrets.GOOGLE_FEDERATION_SERVICE_ACCOUNT }}"
-      - uses: google-github-actions/setup-gcloud@v1
+      - uses: google-github-actions/setup-gcloud@v2
       - name: cloud-sql-proxy
         run: |
           curl https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.0.0-preview.0/cloud-sql-proxy.linux.amd64 --output cloud-sql-proxy
@@ -131,11 +131,11 @@ jobs:
       id-token: "write"
     steps:
       - uses: actions/checkout@v4
-      - uses: google-github-actions/auth@v1
+      - uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: "${{ secrets.GOOGLE_FEDERATION_WORKLOAD_IDENTITY_PROVIDER }}"
           service_account: "${{ secrets.GOOGLE_FEDERATION_SERVICE_ACCOUNT }}"
-      - uses: google-github-actions/setup-gcloud@v1
+      - uses: google-github-actions/setup-gcloud@v2
       - name: deploy
         run: |-
           gcloud run deploy negotiator-review \
