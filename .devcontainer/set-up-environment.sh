@@ -14,3 +14,6 @@ npm run build
 npx playwright install-deps chromium
 npx playwright install chromium
 popd || exit
+
+# Revert any file mode changes
+git diff -p -R --no-color | grep -E "^(diff|(old|new) mode)" --color=never | git apply
