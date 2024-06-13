@@ -55,6 +55,16 @@ jobs:
           source venv/bin/activate
           mypy negotiator tests
           python -m unittest
+  test-dev-container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run tests
+        uses: devcontainers/ci@v0.3
+        with:
+          push: never
+          runCmd: |
+            make test
   google-cloud-build:
     runs-on: ubuntu-latest
     needs: [test]
