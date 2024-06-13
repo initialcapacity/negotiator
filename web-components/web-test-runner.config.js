@@ -36,8 +36,7 @@ const testServerPlugin = {
 };
 export default {
     browsers: [playwrightLauncher({ product: 'chromium' })],
-    hostname: '0.0.0.0',
-    filterBrowserLogs,
+filterBrowserLogs,
     staticLogging: true,
     plugins: [vitePlugin({
         plugins: [testServerPlugin]

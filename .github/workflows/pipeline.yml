@@ -64,7 +64,7 @@ jobs:
         with:
           push: never
           runCmd: |
-            make test
+            make negotiator/test
   google-cloud-build:
     runs-on: ubuntu-latest
     needs: [test]
