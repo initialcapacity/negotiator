@@ -30,6 +30,9 @@
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
       "version": "22.2.0"
+    },
+    "ghcr.io/devcontainers/features/sshd:1": {
+      "version": "latest"
     }
   }
 }
